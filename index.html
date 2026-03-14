@@ -1,0 +1,2050 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Anand Environment</title>
+    <style>
+      :root {
+        --bg: #08111f;
+        --bg-2: #0d1830;
+        --panel: rgba(14, 27, 49, 0.74);
+        --panel-strong: rgba(18, 34, 58, 0.92);
+        --panel-soft: rgba(255, 255, 255, 0.05);
+        --text: #ecf5ff;
+        --muted: #8ea7c5;
+        --line: rgba(154, 184, 219, 0.18);
+        --primary: #3aa8ff;
+        --primary-2: #1388eb;
+        --teal: #21c9b7;
+        --green: #2ed47a;
+        --amber: #ffbc42;
+        --red: #ff6b6b;
+        --violet: #857bff;
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+      }
+
+      body.light {
+        --bg: #edf5fc;
+        --bg-2: #dfeffc;
+        --panel: rgba(255, 255, 255, 0.72);
+        --panel-strong: rgba(255, 255, 255, 0.92);
+        --panel-soft: rgba(10, 44, 80, 0.045);
+        --text: #142844;
+        --muted: #627a97;
+        --line: rgba(38, 91, 148, 0.12);
+        --primary: #1688e8;
+        --primary-2: #0f6ec4;
+        --teal: #109d88;
+        --green: #169f53;
+        --amber: #d88a15;
+        --red: #dc534f;
+        --violet: #695eff;
+        --shadow: 0 24px 70px rgba(23, 63, 107, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background:
+          radial-gradient(circle at 12% 10%, rgba(58, 168, 255, 0.16), transparent 22rem),
+          radial-gradient(circle at 88% 18%, rgba(33, 201, 183, 0.14), transparent 20rem),
+          radial-gradient(circle at 70% 75%, rgba(133, 123, 255, 0.14), transparent 22rem),
+          linear-gradient(180deg, var(--bg), var(--bg-2));
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+        opacity: 0.4;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 290px minmax(0, 1fr) 380px;
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .glass {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      .sidebar,
+      .detail {
+        border-radius: 30px;
+        overflow: hidden;
+      }
+
+      .sidebar {
+        padding: 18px;
+        position: sticky;
+        top: 18px;
+        height: calc(100vh - 36px);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .content {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .detail {
+        padding: 18px;
+        position: sticky;
+        top: 18px;
+        height: calc(100vh - 36px);
+        overflow: auto;
+        scroll-behavior: smooth;
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .logo {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: white;
+        background: linear-gradient(135deg, var(--primary), var(--teal) 60%, var(--violet));
+        box-shadow: 0 18px 36px rgba(18, 136, 235, 0.35);
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .brand h1,
+      .topbar h2,
+      .detail h3,
+      .card h4,
+      .hero h3 {
+        margin: 0;
+      }
+
+      .subtle {
+        color: var(--muted);
+      }
+
+      .nav,
+      .quick-grid,
+      .grid-2,
+      .grid-3,
+      .module-grid,
+      .metrics,
+      .chart-bars {
+        display: grid;
+        gap: 12px;
+      }
+
+      .nav {
+        margin-top: 6px;
+      }
+
+      .nav-btn,
+      .chip,
+      .ghost-btn,
+      .icon-btn,
+      .quick-card,
+      .module-card,
+      .soft-btn {
+        border: 1px solid var(--line);
+        background: var(--panel-strong);
+        color: var(--text);
+        transition: 180ms ease;
+      }
+
+      .nav-btn {
+        width: 100%;
+        border-radius: 18px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .nav-btn:hover,
+      .quick-card:hover,
+      .module-card:hover,
+      .soft-btn:hover,
+      .ghost-btn:hover,
+      .chip:hover {
+        transform: translateY(-1px);
+        border-color: rgba(58, 168, 255, 0.35);
+      }
+
+      .nav-btn.active {
+        background: linear-gradient(135deg, rgba(58, 168, 255, 0.22), rgba(33, 201, 183, 0.16));
+        border-color: rgba(58, 168, 255, 0.45);
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .nav-ico,
+      .mod-ico,
+      .quick-ico,
+      .mini-ico {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        font-size: 20px;
+      }
+
+      .nav-btn.active .nav-ico {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .sidebar-card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 16px;
+        background: linear-gradient(180deg, var(--panel-soft), transparent);
+      }
+
+      .mini-kpis {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mini-kpis > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .mini-kpis strong {
+        font-size: 18px;
+      }
+
+      .topbar {
+        padding: 18px 20px;
+        border-radius: 28px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip,
+      .ghost-btn,
+      .soft-btn {
+        border-radius: 999px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+
+      .chip.active {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        border-color: transparent;
+      }
+
+      .ghost-btn {
+        border-radius: 14px;
+      }
+
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 30px;
+        padding: 24px;
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .hero::before {
+        width: 220px;
+        height: 220px;
+        right: -60px;
+        top: -80px;
+        background: radial-gradient(circle, rgba(58, 168, 255, 0.26), transparent 68%);
+      }
+
+      .hero::after {
+        width: 180px;
+        height: 180px;
+        left: -70px;
+        bottom: -90px;
+        background: radial-gradient(circle, rgba(33, 201, 183, 0.22), transparent 70%);
+      }
+
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 12px;
+      }
+
+      .hero h3 {
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.05;
+        margin-top: 16px;
+        max-width: 800px;
+      }
+
+      .hero p.hero-copy {
+        max-width: 760px;
+        font-size: 15px;
+        line-height: 1.75;
+        margin: 12px 0 0;
+        color: var(--muted);
+      }
+
+      .metrics {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 16px;
+      }
+
+      .metric .label {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .metric .value {
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .metric .trend {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .section {
+        border-radius: 28px;
+        padding: 18px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .section-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quick-card {
+        padding: 18px;
+        border-radius: 24px;
+        min-height: 136px;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .quick-card strong {
+        display: block;
+        margin-top: 18px;
+        font-size: 18px;
+      }
+
+      .quick-card span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .card,
+      .alert,
+      .module-card {
+        border-radius: 24px;
+        padding: 18px;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        background: var(--panel-strong);
+      }
+
+      .card p {
+        margin: 8px 0 0;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .card-top,
+      .module-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .alert {
+        background: linear-gradient(135deg, rgba(17, 136, 225, 0.82), rgba(22, 76, 132, 0.95));
+        border: 1px solid rgba(94, 184, 255, 0.22);
+        color: white;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .alert::after {
+        content: "";
+        position: absolute;
+        right: -24px;
+        top: -24px;
+        width: 120px;
+        height: 120px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.09);
+      }
+
+      .alert p {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        padding: 8px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .s-default {
+        background: rgba(58, 168, 255, 0.14);
+        color: var(--primary);
+      }
+
+      .s-success {
+        background: rgba(46, 212, 122, 0.14);
+        color: var(--green);
+      }
+
+      .s-warning {
+        background: rgba(255, 188, 66, 0.14);
+        color: var(--amber);
+      }
+
+      .s-danger {
+        background: rgba(255, 107, 107, 0.15);
+        color: var(--red);
+      }
+
+      .module-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .module-card {
+        border: 1px solid var(--line);
+        background: var(--panel-strong);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .module-card::before {
+        content: "";
+        position: absolute;
+        inset: auto -40px -40px auto;
+        width: 120px;
+        height: 120px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(58, 168, 255, 0.12), transparent 70%);
+        pointer-events: none;
+      }
+
+      .module-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .module-card p {
+        margin: 8px 0 0;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .module-foot {
+        margin-top: 16px;
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .module-card.active,
+      .quick-card.active {
+        border-color: var(--primary);
+        box-shadow: 0 10px 30px rgba(58, 168, 255, 0.35);
+        transform: scale(1.02);
+      }
+
+      .detail-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .detail-body {
+        display: grid;
+        gap: 16px;
+      }
+
+      .detail-empty {
+        padding: 18px;
+        border: 1px dashed var(--line);
+        border-radius: 20px;
+        color: var(--muted);
+      }
+
+      .detail-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      .detail-list li {
+        line-height: 1.7;
+      }
+
+      .chart-wrap {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 16px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+      }
+
+      .chart-bars {
+        grid-template-columns: repeat(6, 1fr);
+        align-items: end;
+        height: 160px;
+        margin-top: 14px;
+      }
+
+      .bar {
+        border-radius: 14px 14px 10px 10px;
+        background: linear-gradient(180deg, var(--primary), var(--teal));
+        min-height: 18px;
+        position: relative;
+      }
+
+      .bar span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -24px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .pulse {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 0 0 rgba(46, 212, 122, 0.5);
+        animation: pulse 1.8s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(46, 212, 122, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 14px rgba(46, 212, 122, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(46, 212, 122, 0);
+        }
+      }
+
+      .footer-note {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+        padding: 8px 0 2px;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        padding: 12px 20px;
+        border-radius: 14px;
+        opacity: 0;
+        transition: 0.3s ease;
+        z-index: 9999;
+        pointer-events: none;
+        box-shadow: var(--shadow);
+        color: var(--text);
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px);
+      }
+
+      @media (max-width: 1240px) {
+        .app {
+          grid-template-columns: 260px minmax(0, 1fr);
+        }
+
+        .detail {
+          grid-column: 1 / -1;
+          position: static;
+          height: auto;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .app {
+          grid-template-columns: 1fr;
+          padding: 12px;
+        }
+
+        .sidebar {
+          position: static;
+          height: auto;
+        }
+
+        .metrics,
+        .quick-grid,
+        .grid-2,
+        .grid-3,
+        .module-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar,
+        .section-head {
+          flex-direction: column;
+        }
+
+        .topbar-actions {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar glass">
+        <div class="brand">
+          <div class="logo">AE</div>
+          <div>
+            <p class="eyebrow">National-scale smart infrastructure</p>
+            <h1>Anand Environment</h1>
+            <div class="subtle" style="margin-top: 6px;">Water, energy, environment, automation</div>
+          </div>
+        </div>
+
+        <div class="nav" id="nav"></div>
+
+        <section class="sidebar-card">
+          <p class="eyebrow">Platform heartbeat</p>
+          <div
+            style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;"
+          >
+            <strong>Live command status</strong>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="pulse"></span>
+              <span class="subtle">Operational</span>
+            </div>
+          </div>
+          <div class="mini-kpis" id="miniKpis"></div>
+        </section>
+
+        <section class="sidebar-card">
+          <p class="eyebrow">System clock</p>
+          <div style="font-size:28px;font-weight:800;" id="clock">--:--:--</div>
+          <div class="subtle" id="clockMeta" style="margin-top:8px;">India Operations Window</div>
+        </section>
+
+        <div class="footer-note">
+          Phase 1 UI only. No live SCADA, IoT, GIS, or AI integrations in this file.
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar glass">
+          <div>
+            <p class="eyebrow">Smart infrastructure management platform</p>
+            <h2 id="pageTitle">Overview</h2>
+            <div class="subtle" id="pageSubtitle" style="margin-top:8px;">
+              One operational surface for water, renewable energy, environmental intelligence, and
+              control workflows.
+            </div>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="chip-row" id="roleChips"></div>
+            <div class="chip-row" id="langChips"></div>
+            <button class="ghost-btn" id="simulateBtn">Simulate alert pulse</button>
+            <button class="icon-btn" id="themeBtn" title="Toggle theme">☾</button>
+          </div>
+        </header>
+
+        <section id="page"></section>
+      </main>
+
+      <aside class="detail glass">
+        <div class="detail-header">
+          <div>
+            <p class="eyebrow">Module detail panel</p>
+            <h3 id="detailTitle">Select a module</h3>
+          </div>
+          <button class="icon-btn" id="clearDetail">✕</button>
+        </div>
+        <div class="detail-body" id="detailBody">
+          <div class="detail-empty">
+            Click any module card or quick action to open a polished Phase 1 detail panel.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="toast" class="toast">Module opened</div>
+
+    <script>
+      const state = {
+        page: "overview",
+        role: "Operator",
+        language: "English",
+        theme: "dark",
+        detail: null
+      };
+
+      const tabs = [
+        { key: "overview", label: "Overview", icon: "◫" },
+        { key: "water", label: "Water", icon: "💧" },
+        { key: "energy", label: "Energy", icon: "⚡" },
+        { key: "environment", label: "Environment", icon: "🌿" },
+        { key: "control", label: "Control", icon: "⛭" }
+      ];
+
+      const roles = ["Municipal", "Industry", "Operator", "Engineer", "Government"];
+      const languages = ["English", "हिंदी", "मराठी"];
+
+      const modules = {
+        "water-treatment": {
+          title: "Water Treatment Plants",
+          icon: "💧",
+          status: "Plant health",
+          statusTone: "success",
+          eyebrow: "Water services",
+          description: "Monitor drinking water treatment capacity, quality, and 24×7 supply readiness.",
+          kpis: [
+            { label: "Capacity online", value: 420, suffix: " MLD" },
+            { label: "Quality alerts", value: 2, suffix: "" },
+            { label: "24×7 zones", value: 31, suffix: "" }
+          ],
+          highlights: [
+            "Plant overview cards for inflow, treatment stage, and quality compliance.",
+            "Operator-friendly layout for continuous water supply management.",
+            "Ready for future telemetry, alarms, and asset drilldowns."
+          ],
+          notes: [
+            "Phase 2 can integrate SCADA data, quality sensors, and treatment-stage alerts.",
+            "Role-based views can separate operator, engineering, and executive dashboards."
+          ]
+        },
+        "distribution-network": {
+          title: "Distribution Network",
+          icon: "📈",
+          status: "Leak watch",
+          statusTone: "warning",
+          eyebrow: "Pipeline intelligence",
+          description: "Track pressure zones, flow imbalance, and AI leak detection across urban networks.",
+          kpis: [
+            { label: "Pressure zones", value: 84, suffix: "" },
+            { label: "Leak score", value: 7.8, suffix: "/10" },
+            { label: "NRW trend", value: -3.8, suffix: "%" }
+          ],
+          highlights: [
+            "Pressure and flow imbalance cards for each operational zone.",
+            "Leak-risk ranking designed for rapid operator triage.",
+            "Future-ready for GIS overlays, work orders, and repair status."
+          ],
+          notes: [
+            "Phase 2 can combine pressure, flow, and sensor events with AI leak scoring.",
+            "This view is suited to municipal water boards and field operators."
+          ]
+        },
+        "wastewater-reuse": {
+          title: "Wastewater & Reuse",
+          icon: "♻",
+          status: "Reuse loop",
+          statusTone: "default",
+          eyebrow: "STP and recycling",
+          description: "Supervise STPs, treated wastewater recycling, and industrial reuse flows.",
+          kpis: [
+            { label: "STPs monitored", value: 26, suffix: "" },
+            { label: "Reuse share", value: 38, suffix: "%" },
+            { label: "Industrial clients", value: 19, suffix: "" }
+          ],
+          highlights: [
+            "Treatment, discharge, and reuse cards in one operational flow.",
+            "Strong industrial-reuse and environmental-compliance positioning.",
+            "Prepared for optimization and contract-driven reuse planning."
+          ],
+          notes: [
+            "Phase 2 can connect plant telemetry, discharge monitoring, and reuse demand data.",
+            "Useful for utilities, industries, and environmental engineering teams."
+          ]
+        },
+        "scada-automation": {
+          title: "SCADA & Automation",
+          icon: "🖥",
+          status: "Control room",
+          statusTone: "default",
+          eyebrow: "Automation systems",
+          description: "Visualize alarms, automation health, and remote control readiness.",
+          kpis: [
+            { label: "Automated assets", value: 312, suffix: "" },
+            { label: "Alarm backlog", value: 9, suffix: "" },
+            { label: "Control uptime", value: 99.6, suffix: "%" }
+          ],
+          highlights: [
+            "Control-room panels for alarms, automation, and overrides.",
+            "Prepared for secure role-based control and audit trails later.",
+            "Designed for plant operators and infrastructure command teams."
+          ],
+          notes: [
+            "Phase 1 keeps controls visual only with no command execution.",
+            "Phase 2 should enforce RBAC, encryption, and audit logging."
+          ]
+        },
+        "solar-monitoring": {
+          title: "Solar Plant Monitoring",
+          icon: "☀",
+          status: "Generation live",
+          statusTone: "warning",
+          eyebrow: "Renewable generation",
+          description: "Track solar generation, pumping support, and plant-level renewable output.",
+          kpis: [
+            { label: "Generation today", value: 148, suffix: " MWh" },
+            { label: "Pumps supported", value: 74, suffix: "" },
+            { label: "Underperforming sites", value: 3, suffix: "" }
+          ],
+          highlights: [
+            "Fleet cards for generation, availability, and underperformance.",
+            "Clear link between renewable output and water infrastructure demand.",
+            "Ready for future drilldowns into plant and inverter performance."
+          ],
+          notes: [
+            "Phase 2 can integrate telemetry, performance analytics, and maintenance flags.",
+            "Ideal for energy operators and plant managers."
+          ]
+        },
+        "battery-microgrid": {
+          title: "Battery & Microgrids",
+          icon: "🔋",
+          status: "Storage status",
+          statusTone: "default",
+          eyebrow: "Resilience systems",
+          description: "Monitor battery reserve, storage health, and renewable microgrid resilience.",
+          kpis: [
+            { label: "Average SOC", value: 74, suffix: "%" },
+            { label: "Microgrids", value: 12, suffix: "" },
+            { label: "Resilience events", value: 1, suffix: "" }
+          ],
+          highlights: [
+            "Battery SOC, reserve-duration, and resilience posture cards.",
+            "Useful for continuity planning in infrastructure operations.",
+            "Prepared for dispatch logic and storage optimization later."
+          ],
+          notes: [
+            "Phase 2 can add dispatch policy, forecast coupling, and resilience simulation.",
+            "Supports both energy and mission-critical infrastructure operations."
+          ]
+        },
+        "energy-optimization": {
+          title: "Energy Optimization",
+          icon: "⚡",
+          status: "Efficiency AI",
+          statusTone: "success",
+          eyebrow: "Plant efficiency",
+          description: "Optimize pumping stations and treatment plants using energy intelligence.",
+          kpis: [
+            { label: "Pump energy", value: -11.2, suffix: "%" },
+            { label: "High-load sites", value: 7, suffix: "" },
+            { label: "Savings potential", value: 2.4, suffix: " Cr" }
+          ],
+          highlights: [
+            "Efficiency panels for pumping stations and treatment operations.",
+            "Executive and operator views can coexist cleanly in this module.",
+            "Prepared for scenario simulation and recommendation workflows."
+          ],
+          notes: [
+            "Phase 2 can use time-series telemetry, tariffs, and optimization services.",
+            "This module is central to reducing operating cost at scale."
+          ]
+        },
+        "sustainability-analytics": {
+          title: "Sustainability Analytics",
+          icon: "🌿",
+          status: "ESG pulse",
+          statusTone: "success",
+          eyebrow: "Environmental performance",
+          description: "Measure carbon footprint, reuse gains, and sustainability outcomes.",
+          kpis: [
+            { label: "Carbon avoided", value: 18.6, suffix: " kt" },
+            { label: "Reuse gain", value: 92, suffix: " MLD" },
+            { label: "Target alignment", value: 84, suffix: "%" }
+          ],
+          highlights: [
+            "Executive sustainability cards with operational depth.",
+            "Strong fit for agency, ESG, and engineering reporting.",
+            "Prepared for live reporting and benchmarking later."
+          ],
+          notes: [
+            "Phase 2 can compute real carbon and reuse outcomes from infrastructure data.",
+            "A clear bridge between engineering operations and sustainability goals."
+          ]
+        },
+        "pollution-monitoring": {
+          title: "Pollution Monitoring",
+          icon: "📡",
+          status: "Compliance watch",
+          statusTone: "warning",
+          eyebrow: "Environmental quality",
+          description: "Track pollution metrics, sensor anomalies, and compliance exposure.",
+          kpis: [
+            { label: "Sensor stations", value: 186, suffix: "" },
+            { label: "Anomalies today", value: 14, suffix: "" },
+            { label: "Compliance", value: 96.4, suffix: "%" }
+          ],
+          highlights: [
+            "Cards for anomaly severity, sensor health, and environmental exposure.",
+            "Prepared for GIS layers and threshold-based workflows.",
+            "A practical view for environmental engineers and regulators."
+          ],
+          notes: [
+            "Phase 2 can integrate air, water, and discharge sensors with maps.",
+            "Useful for both operational monitoring and compliance review."
+          ]
+        },
+        "flood-drought": {
+          title: "Flood & Drought Warning",
+          icon: "🌧",
+          status: "Climate risk",
+          statusTone: "danger",
+          eyebrow: "Climate resilience",
+          description: "Predict flood and drought risk for districts, reservoirs, and vulnerable infrastructure.",
+          kpis: [
+            { label: "Flood risk", value: 8.9, suffix: "/10" },
+            { label: "Drought watch", value: 5.2, suffix: "/10" },
+            { label: "Reservoirs tracked", value: 42, suffix: "" }
+          ],
+          highlights: [
+            "Prepared for district and state-level early warning dashboards.",
+            "Risk cards for flood, drought, and downstream exposure.",
+            "Ready for satellite layers, forecasts, and escalation workflows."
+          ],
+          notes: [
+            "Phase 2 can integrate weather models, remote sensing, and geospatial alerting.",
+            "This is a key module for government and emergency planning teams."
+          ]
+        },
+        "ai-command": {
+          title: "AI Command Layer",
+          icon: "🧠",
+          status: "AI stack",
+          statusTone: "default",
+          eyebrow: "Model systems",
+          description: "Bring leak detection, demand prediction, quality AI, and optimization into one governed layer.",
+          kpis: [
+            { label: "Models tracked", value: 8, suffix: "" },
+            { label: "Inference health", value: 98.7, suffix: "%" },
+            { label: "Review queue", value: 5, suffix: "" }
+          ],
+          highlights: [
+            "A productized shell for high-impact AI systems.",
+            "Supports future confidence, drift, and operator-review workflows.",
+            "Makes advanced AI governable for infrastructure teams."
+          ],
+          notes: [
+            "Phase 2 can define model services, jobs, review flows, and monitoring.",
+            "Important for trust and operational adoption at national scale."
+          ]
+        },
+        "operations-center": {
+          title: "Operations Center",
+          icon: "🛠",
+          status: "Response center",
+          statusTone: "default",
+          eyebrow: "Cross-system response",
+          description: "Coordinate O&M, incidents, teams, maintenance, and multi-agency reporting.",
+          kpis: [
+            { label: "Open work orders", value: 46, suffix: "" },
+            { label: "Field teams", value: 28, suffix: "" },
+            { label: "Critical incidents", value: 3, suffix: "" }
+          ],
+          highlights: [
+            "One response surface for water, energy, and environmental operations.",
+            "Built for field teams, command staff, and executive oversight.",
+            "Prepared for dispatching, ticketing, and reporting later."
+          ],
+          notes: [
+            "Phase 2 can integrate maintenance systems, reports, and field workflows.",
+            "This is the operational nerve center of the platform."
+          ]
+        }
+      };
+
+      const pages = {
+        overview: {
+          title: "Overview",
+          subtitle:
+            "National command view across water, renewable energy, environmental intelligence, and critical operations.",
+          heroTag: "National-scale command center",
+          heroTitle: "Critical infrastructure visibility in one interactive platform",
+          heroCopy:
+            "A modern Phase 1 interface for cities, industries, operators, engineers, and government agencies to supervise smart infrastructure with clarity and speed.",
+          metrics: [
+            {
+              label: "Assets live",
+              value: 1248,
+              suffix: "",
+              trend: "Across water, energy, and environment systems"
+            },
+            {
+              label: "Water uptime",
+              value: 99.2,
+              suffix: "%",
+              trend: "24×7 service continuity trend positive"
+            },
+            {
+              label: "Renewable output",
+              value: 148,
+              suffix: " MWh",
+              trend: "Today’s generated clean energy"
+            },
+            {
+              label: "Active alerts",
+              value: 18,
+              suffix: "",
+              trend: "Prioritized by risk and operational impact"
+            }
+          ],
+          quick: [
+            {
+              title: "Leak command",
+              desc: "Review high-risk distribution zones",
+              module: "distribution-network",
+              icon: "📈"
+            },
+            {
+              title: "SCADA room",
+              desc: "Open automation and alarms",
+              module: "scada-automation",
+              icon: "🖥"
+            },
+            {
+              title: "Solar output",
+              desc: "Check plant performance",
+              module: "solar-monitoring",
+              icon: "☀"
+            },
+            {
+              title: "Climate alert",
+              desc: "Open flood and drought briefing",
+              module: "flood-drought",
+              icon: "🌧"
+            }
+          ],
+          alerts: [
+            {
+              title: "North city pressure zone showing likely hidden leakage",
+              desc: "AI leak scoring elevated Zone 4 after overnight pressure drops and flow imbalance."
+            },
+            {
+              title: "River basin flood probability elevated for the next 36 hours",
+              desc: "Reservoir pressure and downstream exposure are trending higher across priority districts."
+            }
+          ],
+          cards: [
+            {
+              title: "Municipal corporations",
+              desc: "Water continuity, NRW risk, treatment output, and public impact dashboards.",
+              icon: "🏛"
+            },
+            {
+              title: "Industries",
+              desc: "Recycled water supply, compliance visibility, and energy-cost insight.",
+              icon: "🏭"
+            },
+            {
+              title: "Infrastructure operators",
+              desc: "Daily uptime, alarms, pump efficiency, and maintenance coordination.",
+              icon: "🛠"
+            },
+            {
+              title: "Environmental engineers",
+              desc: "Carbon, pollution, climate risk, and sustainability performance.",
+              icon: "🌿"
+            }
+          ],
+          chart: {
+            title: "Infrastructure load profile",
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            values: [62, 78, 58, 91, 84, 66]
+          },
+          moduleKeys: [
+            "water-treatment",
+            "distribution-network",
+            "wastewater-reuse",
+            "solar-monitoring",
+            "flood-drought",
+            "operations-center"
+          ]
+        },
+
+        water: {
+          title: "Water Systems",
+          subtitle:
+            "Drinking water, treatment, distribution, reuse, irrigation, SCADA, and O&M in one domain view.",
+          heroTag: "Water services",
+          heroTitle: "From potable treatment to wastewater reuse, every water asset in one operational flow",
+          heroCopy:
+            "Designed for plant teams, municipalities, operators, and infrastructure leaders managing large public and industrial water systems.",
+          metrics: [
+            {
+              label: "Supply continuity",
+              value: 99.2,
+              suffix: "%",
+              trend: "Continuous service availability across monitored zones"
+            },
+            {
+              label: "Treated output",
+              value: 420,
+              suffix: " MLD",
+              trend: "Current water treatment capacity online"
+            },
+            {
+              label: "Reuse flow",
+              value: 92,
+              suffix: " MLD",
+              trend: "Industrial and non-potable reuse supply"
+            },
+            {
+              label: "Leak alerts",
+              value: 6,
+              suffix: "",
+              trend: "Priority network issues needing response"
+            }
+          ],
+          quick: [
+            {
+              title: "Treatment view",
+              desc: "Open drinking water treatment plants",
+              module: "water-treatment",
+              icon: "💧"
+            },
+            {
+              title: "Leak detection",
+              desc: "Review network anomalies",
+              module: "distribution-network",
+              icon: "📈"
+            },
+            {
+              title: "Reuse operations",
+              desc: "Inspect STP and reuse flows",
+              module: "wastewater-reuse",
+              icon: "♻"
+            },
+            {
+              title: "Automation",
+              desc: "Open SCADA and alarm controls",
+              module: "scada-automation",
+              icon: "🖥"
+            }
+          ],
+          cards: [
+            {
+              title: "24×7 water supply",
+              desc: "Zone-by-zone readiness for continuous service and delivery balance.",
+              icon: "🚰"
+            },
+            {
+              title: "Pipeline network",
+              desc: "Pressure, flow, leakage risk, and operator intervention surface.",
+              icon: "🧭"
+            },
+            {
+              title: "Wastewater recycling",
+              desc: "Treatment, recovery, and industrial reuse visibility.",
+              icon: "♻"
+            }
+          ],
+          chart: {
+            title: "Water quality compliance trend",
+            labels: ["P1", "P2", "P3", "P4", "P5", "P6"],
+            values: [88, 92, 94, 96, 93, 97]
+          },
+          moduleKeys: [
+            "water-treatment",
+            "distribution-network",
+            "wastewater-reuse",
+            "scada-automation"
+          ]
+        },
+
+        energy: {
+          title: "Energy Systems",
+          subtitle: "Solar infrastructure, pumping energy, battery reserve, and microgrid continuity.",
+          heroTag: "Energy services",
+          heroTitle: "Renewable energy and plant efficiency built into infrastructure operations",
+          heroCopy:
+            "A command-ready energy layer for solar plants, smart pumping, battery systems, and renewable-backed utility infrastructure.",
+          metrics: [
+            {
+              label: "Generation today",
+              value: 148,
+              suffix: " MWh",
+              trend: "Clean energy produced across monitored assets"
+            },
+            {
+              label: "Battery reserve",
+              value: 74,
+              suffix: "%",
+              trend: "Average storage state of charge"
+            },
+            {
+              label: "Microgrids",
+              value: 12,
+              suffix: "",
+              trend: "Resilient distributed energy systems"
+            },
+            {
+              label: "Savings potential",
+              value: 2.4,
+              suffix: " Cr",
+              trend: "Optimization-driven cost opportunity"
+            }
+          ],
+          quick: [
+            {
+              title: "Solar plants",
+              desc: "Open generation monitoring",
+              module: "solar-monitoring",
+              icon: "☀"
+            },
+            {
+              title: "Storage",
+              desc: "Review battery resilience",
+              module: "battery-microgrid",
+              icon: "🔋"
+            },
+            {
+              title: "Optimize load",
+              desc: "Inspect plant energy AI",
+              module: "energy-optimization",
+              icon: "⚡"
+            },
+            {
+              title: "Operations hub",
+              desc: "Coordinate response workflows",
+              module: "operations-center",
+              icon: "🛠"
+            }
+          ],
+          cards: [
+            {
+              title: "Solar-powered pumping",
+              desc: "Link energy generation directly to pumping continuity and cost control.",
+              icon: "🔆"
+            },
+            {
+              title: "Battery systems",
+              desc: "Storage-backed resilience for critical water and plant operations.",
+              icon: "🔋"
+            },
+            {
+              title: "Energy analytics",
+              desc: "Consumption, performance, and optimization opportunities.",
+              icon: "📊"
+            }
+          ],
+          chart: {
+            title: "Renewable generation curve",
+            labels: ["6a", "8a", "10a", "12p", "2p", "4p"],
+            values: [22, 56, 84, 98, 79, 41]
+          },
+          moduleKeys: [
+            "solar-monitoring",
+            "battery-microgrid",
+            "energy-optimization",
+            "operations-center"
+          ]
+        },
+
+        environment: {
+          title: "Environment",
+          subtitle:
+            "Carbon, pollution, climate resilience, sustainability analytics, and environmental intelligence.",
+          heroTag: "Environmental services",
+          heroTitle: "Sustainability, pollution, and climate risk dashboards with operational depth",
+          heroCopy:
+            "Built for environmental engineers, agencies, utilities, and leadership teams who need practical visibility into environmental performance and emerging risk.",
+          metrics: [
+            {
+              label: "Carbon avoided",
+              value: 18.6,
+              suffix: " kt",
+              trend: "Avoided emissions through renewables and reuse"
+            },
+            {
+              label: "Pollution anomalies",
+              value: 14,
+              suffix: "",
+              trend: "Environmental deviations awaiting review"
+            },
+            {
+              label: "Flood risk",
+              value: 8.9,
+              suffix: "/10",
+              trend: "Regional climate-risk severity indicator"
+            },
+            {
+              label: "Compliance",
+              value: 96.4,
+              suffix: "%",
+              trend: "Current environmental conformance score"
+            }
+          ],
+          quick: [
+            {
+              title: "ESG analytics",
+              desc: "Open sustainability dashboard",
+              module: "sustainability-analytics",
+              icon: "🌿"
+            },
+            {
+              title: "Pollution watch",
+              desc: "Inspect anomalies and exposure",
+              module: "pollution-monitoring",
+              icon: "📡"
+            },
+            {
+              title: "Flood & drought",
+              desc: "Review climate resilience signals",
+              module: "flood-drought",
+              icon: "🌧"
+            },
+            {
+              title: "AI layer",
+              desc: "See model-backed environmental systems",
+              module: "ai-command",
+              icon: "🧠"
+            }
+          ],
+          cards: [
+            {
+              title: "Carbon footprint tracking",
+              desc: "Translate operations into measurable sustainability outcomes.",
+              icon: "🌱"
+            },
+            {
+              title: "Environmental impact",
+              desc: "Operationalize impact visibility across infrastructure projects.",
+              icon: "🛰"
+            },
+            {
+              title: "Climate risk tools",
+              desc: "Prepare agencies and operators for severe environmental events.",
+              icon: "🌊"
+            }
+          ],
+          chart: {
+            title: "Climate risk intensity",
+            labels: ["N", "E", "S", "W", "C1", "C2"],
+            values: [72, 48, 81, 65, 93, 57]
+          },
+          moduleKeys: [
+            "sustainability-analytics",
+            "pollution-monitoring",
+            "flood-drought",
+            "ai-command"
+          ]
+        },
+
+        control: {
+          title: "Control Center",
+          subtitle:
+            "AI systems, role-based views, operations coordination, preferences, and automation surfaces.",
+          heroTag: "Control and coordination",
+          heroTitle: "One place to supervise incidents, AI systems, roles, and cross-domain operations",
+          heroCopy:
+            "The command layer for infrastructure teams managing water, energy, automation, environmental risk, and field response.",
+          metrics: [
+            {
+              label: "Open work orders",
+              value: 46,
+              suffix: "",
+              trend: "Pending maintenance and response activities"
+            },
+            {
+              label: "Field teams",
+              value: 28,
+              suffix: "",
+              trend: "Coordinated operator and engineering teams"
+            },
+            {
+              label: "Critical incidents",
+              value: 3,
+              suffix: "",
+              trend: "Cross-system escalations in queue"
+            },
+            {
+              label: "Models tracked",
+              value: 8,
+              suffix: "",
+              trend: "AI services monitored in platform view"
+            }
+          ],
+          quick: [
+            {
+              title: "AI command",
+              desc: "Inspect model systems and review queue",
+              module: "ai-command",
+              icon: "🧠"
+            },
+            {
+              title: "Ops hub",
+              desc: "Coordinate incidents and teams",
+              module: "operations-center",
+              icon: "🛠"
+            },
+            {
+              title: "SCADA",
+              desc: "Open automation and alarms",
+              module: "scada-automation",
+              icon: "🖥"
+            },
+            {
+              title: "Network watch",
+              desc: "Jump to leak-priority zones",
+              module: "distribution-network",
+              icon: "📈"
+            }
+          ],
+          cards: [
+            {
+              title: "Role-based access surfaces",
+              desc: "Municipal, industrial, engineering, operator, and government workflows.",
+              icon: "👥"
+            },
+            {
+              title: "Automation readiness",
+              desc: "Prepared for secure control, alarms, and operational governance.",
+              icon: "⛭"
+            },
+            {
+              title: "Reporting and audit",
+              desc: "Future-ready for reports, escalation logs, and executive review.",
+              icon: "🗂"
+            }
+          ],
+          chart: {
+            title: "Incident response throughput",
+            labels: ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"],
+            values: [41, 58, 73, 67, 89, 76]
+          },
+          moduleKeys: [
+            "ai-command",
+            "operations-center",
+            "scada-automation",
+            "distribution-network"
+          ]
+        }
+      };
+
+      const toneClass = (tone) =>
+        ({
+          success: "s-success",
+          warning: "s-warning",
+          danger: "s-danger",
+          default: "s-default"
+        }[tone] || "s-default");
+
+      function animateValue(el, target, suffix = "") {
+        const isFloat = String(target).includes(".");
+        const start = 0;
+        const duration = 800;
+        const startTime = performance.now();
+
+        function step(now) {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const value = start + (target - start) * eased;
+          el.textContent = (isFloat ? value.toFixed(1) : Math.round(value)) + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      function showToast(text) {
+        const t = document.getElementById("toast");
+        t.textContent = text;
+        t.classList.add("show");
+
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => {
+          t.classList.remove("show");
+        }, 2000);
+      }
+
+      function clearActiveCards() {
+        document.querySelectorAll("[data-module]").forEach((x) => {
+          x.classList.remove("active");
+        });
+      }
+
+      function activateCard(moduleKey, clickedEl) {
+        clearActiveCards();
+
+        if (clickedEl) {
+          clickedEl.classList.add("active");
+        }
+
+        state.detail = moduleKey;
+        renderDetail();
+
+        document.querySelector(".detail").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+        showToast(modules[moduleKey].title + " opened");
+      }
+
+      function renderNav() {
+        const nav = document.getElementById("nav");
+        nav.innerHTML = tabs
+          .map(
+            (tab) => `
+          <button class="nav-btn ${state.page === tab.key ? "active" : ""}" data-page="${tab.key}">
+            <span class="nav-left">
+              <span class="nav-ico">${tab.icon}</span>
+              <span>${tab.label}</span>
+            </span>
+            <span>›</span>
+          </button>
+        `
+          )
+          .join("");
+
+        nav.querySelectorAll("[data-page]").forEach((btn) => {
+          btn.onclick = () => {
+            state.page = btn.dataset.page;
+            state.detail = null;
+            renderPage();
+            renderNav();
+            renderDetail();
+          };
+        });
+      }
+
+      function renderMiniKpis() {
+        const page = pages[state.page];
+        document.getElementById("miniKpis").innerHTML = page.metrics
+          .slice(0, 3)
+          .map(
+            (k) => `
+          <div>
+            <span class="subtle">${k.label}</span>
+            <strong>${k.value}${k.suffix}</strong>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      function renderRoleChips() {
+        const node = document.getElementById("roleChips");
+        node.innerHTML = roles
+          .map(
+            (role) => `
+          <button class="chip ${state.role === role ? "active" : ""}" data-role="${role}">${role}</button>
+        `
+          )
+          .join("");
+
+        node.querySelectorAll("[data-role]").forEach((btn) => {
+          btn.onclick = () => {
+            state.role = btn.dataset.role;
+            renderRoleChips();
+          };
+        });
+      }
+
+      function renderLangChips() {
+        const node = document.getElementById("langChips");
+        node.innerHTML = languages
+          .map(
+            (lang) => `
+          <button class="chip ${state.language === lang ? "active" : ""}" data-lang="${lang}">${lang}</button>
+        `
+          )
+          .join("");
+
+        node.querySelectorAll("[data-lang]").forEach((btn) => {
+          btn.onclick = () => {
+            state.language = btn.dataset.lang;
+            renderLangChips();
+          };
+        });
+      }
+
+      function metricHtml(metric) {
+        return `
+          <div class="metric">
+            <div class="label">${metric.label}</div>
+            <div class="value" data-animate="${metric.value}" data-suffix="${metric.suffix || ""}">0</div>
+            <div class="trend">${metric.trend}</div>
+          </div>
+        `;
+      }
+
+      function quickHtml(item) {
+        return `
+          <button class="quick-card" data-module="${item.module}">
+            <div class="quick-ico">${item.icon}</div>
+            <strong>${item.title}</strong>
+            <span>${item.desc}</span>
+          </button>
+        `;
+      }
+
+      function cardHtml(item) {
+        return `
+          <article class="card">
+            <div class="card-top">
+              <div class="mini-ico">${item.icon}</div>
+              <span class="status s-default">Dashboard view</span>
+            </div>
+            <h4>${item.title}</h4>
+            <p>${item.desc}</p>
+          </article>
+        `;
+      }
+
+      function alertHtml(item) {
+        return `
+          <article class="alert">
+            <p class="eyebrow">Priority signal</p>
+            <h4>${item.title}</h4>
+            <p>${item.desc}</p>
+          </article>
+        `;
+      }
+
+      function moduleHtml(key) {
+        const mod = modules[key];
+        return `
+          <article class="module-card" data-module="${key}">
+            <div class="module-top">
+              <div class="mod-ico">${mod.icon}</div>
+              <span class="status ${toneClass(mod.statusTone)}">${mod.status}</span>
+            </div>
+            <h4>${mod.title}</h4>
+            <p>${mod.description}</p>
+            <div class="module-foot">Open module detail →</div>
+          </article>
+        `;
+      }
+
+      function chartHtml(chart) {
+        return `
+          <div class="chart-wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div>
+                <p class="eyebrow">${chart.title}</p>
+                <strong>Mock operational trend</strong>
+              </div>
+              <span class="status s-default">Interactive UI preview</span>
+            </div>
+            <div class="chart-bars">
+              ${chart.values
+                .map(
+                  (v, i) => `
+                <div class="bar" style="height:${Math.max(v, 18)}%;">
+                  <span>${chart.labels[i]}</span>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPage() {
+        const page = pages[state.page];
+        document.getElementById("pageTitle").textContent = page.title;
+        document.getElementById("pageSubtitle").textContent = page.subtitle;
+
+        document.getElementById("page").innerHTML = `
+          <section class="hero glass">
+            <div class="hero-tag">
+              <span class="pulse"></span>
+              <span>${page.heroTag}</span>
+            </div>
+            <h3>${page.heroTitle}</h3>
+            <p class="hero-copy">${page.heroCopy}</p>
+            <div class="metrics">
+              ${page.metrics.map(metricHtml).join("")}
+            </div>
+          </section>
+
+          <section class="section glass">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Fast access</p>
+                <h3>Interactive quick actions</h3>
+                <p>Large operator-friendly controls that jump into the most important modules.</p>
+              </div>
+              <button class="soft-btn" id="openOpsBtn">Open operations center</button>
+            </div>
+            <div class="quick-grid">
+              ${page.quick.map(quickHtml).join("")}
+            </div>
+          </section>
+
+          ${
+            page.alerts
+              ? `
+            <section class="section glass">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">High visibility</p>
+                  <h3>Priority alerts</h3>
+                  <p>Signals that should lead the command screen instead of hiding inside reports.</p>
+                </div>
+              </div>
+              <div class="grid-2">
+                ${page.alerts.map(alertHtml).join("")}
+              </div>
+            </section>
+          `
+              : ""
+          }
+
+          <section class="section glass">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">${state.page === "overview" ? "Stakeholder views" : "Operational context"}</p>
+                <h3>${state.page === "overview" ? "Audience dashboards" : "Context cards"}</h3>
+                <p>${
+                  state.page === "overview"
+                    ? "Different decision-makers can enter the platform from the same command layer."
+                    : "These cards show how the dashboard can present domain-specific context cleanly."
+                }</p>
+              </div>
+            </div>
+            <div class="grid-3">
+              ${page.cards.map(cardHtml).join("")}
+            </div>
+          </section>
+
+          <section class="section glass">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Trend preview</p>
+                <h3>Visual analytics block</h3>
+                <p>A styled placeholder for charts, KPIs, and time-series UI.</p>
+              </div>
+            </div>
+            ${chartHtml(page.chart)}
+          </section>
+
+          <section class="section glass">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Core systems</p>
+                <h3>Module grid</h3>
+                <p>Click any module to open a detailed Phase 1 panel on the right.</p>
+              </div>
+            </div>
+            <div class="module-grid">
+              ${page.moduleKeys.map(moduleHtml).join("")}
+            </div>
+          </section>
+        `;
+
+        document.querySelectorAll("[data-module]").forEach((el) => {
+          el.onclick = () => {
+            activateCard(el.dataset.module, el);
+          };
+        });
+
+        document.getElementById("openOpsBtn").onclick = () => {
+          activateCard("operations-center", null);
+        };
+
+        document.querySelectorAll("[data-animate]").forEach((el) => {
+          animateValue(el, parseFloat(el.dataset.animate), el.dataset.suffix);
+        });
+
+        renderMiniKpis();
+      }
+
+      function renderDetail() {
+        const title = document.getElementById("detailTitle");
+        const body = document.getElementById("detailBody");
+
+        if (!state.detail || !modules[state.detail]) {
+          document.getElementById("pageTitle").textContent = pages[state.page].title;
+          title.textContent = "Select a module";
+          body.innerHTML = `
+            <div class="detail-empty">
+              Click any module card or quick action to open a polished Phase 1 detail panel.
+            </div>
+          `;
+          return;
+        }
+
+        const mod = modules[state.detail];
+        document.getElementById("pageTitle").textContent = pages[state.page].title + " → " + mod.title;
+        title.textContent = mod.title;
+
+        body.innerHTML = `
+          <section class="card">
+            <div class="module-top">
+              <div class="mod-ico">${mod.icon}</div>
+              <span class="status ${toneClass(mod.statusTone)}">${mod.status}</span>
+            </div>
+            <p class="eyebrow">${mod.eyebrow}</p>
+            <h4>${mod.title}</h4>
+            <p>${mod.description}</p>
+          </section>
+
+          <section class="card">
+            <p class="eyebrow">KPI snapshot</p>
+            <div class="grid-3">
+              ${mod.kpis
+                .map(
+                  (k) => `
+                <div class="metric" style="padding:14px;">
+                  <div class="label">${k.label}</div>
+                  <div class="value detail-value" data-animate="${k.value}" data-suffix="${k.suffix || ""}">0</div>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </section>
+
+          <section class="card">
+            <p class="eyebrow">What this module will show</p>
+            <ul class="detail-list">
+              ${mod.highlights.map((x) => `<li>${x}</li>`).join("")}
+            </ul>
+          </section>
+
+          <section class="card">
+            <p class="eyebrow">Phase 2 notes</p>
+            <ul class="detail-list">
+              ${mod.notes.map((x) => `<li>${x}</li>`).join("")}
+            </ul>
+          </section>
+
+          <section class="chart-wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div>
+                <p class="eyebrow">Module activity preview</p>
+                <strong>${mod.title} trend block</strong>
+              </div>
+              <span class="status ${toneClass(mod.statusTone)}">${mod.status}</span>
+            </div>
+            <div class="chart-bars">
+              ${[42, 64, 56, 78, 69, 88]
+                .map(
+                  (v, i) => `
+                <div class="bar" style="height:${v}%">
+                  <span>${["T1", "T2", "T3", "T4", "T5", "T6"][i]}</span>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </section>
+        `;
+
+        body.querySelectorAll(".detail-value").forEach((el) => {
+          animateValue(el, parseFloat(el.dataset.animate), el.dataset.suffix);
+        });
+      }
+
+      function tickClock() {
+        const now = new Date();
+        document.getElementById("clock").textContent = now.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
+        document.getElementById("clockMeta").textContent = now.toLocaleDateString("en-IN", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+      }
+
+      document.getElementById("clearDetail").onclick = () => {
+        state.detail = null;
+        clearActiveCards();
+        renderDetail();
+      };
+
+      document.getElementById("simulateBtn").onclick = () => {
+        const cycle = [
+          "distribution-network",
+          "flood-drought",
+          "operations-center",
+          "solar-monitoring"
+        ];
+        const next = cycle[Math.floor(Math.random() * cycle.length)];
+        state.detail = next;
+        renderDetail();
+        showToast(modules[next].title + " opened");
+        document.querySelector(".detail").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      };
+
+      document.getElementById("themeBtn").onclick = () => {
+        document.body.classList.toggle("light");
+        state.theme = document.body.classList.contains("light") ? "light" : "dark";
+        document.getElementById("themeBtn").textContent = state.theme === "light" ? "☀" : "☾";
+      };
+
+      renderNav();
+      renderRoleChips();
+      renderLangChips();
+      renderPage();
+      renderDetail();
+      tickClock();
+      setInterval(tickClock, 1000);
+    </script>
+  </body>
+</html>
+```
